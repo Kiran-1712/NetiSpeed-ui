@@ -57,6 +57,7 @@ interface NetworkInformation extends EventTarget {
   downlink?: number;
   rtt?: number;
   type?: string;
+  saveData?: boolean;
 }
 
 export interface ConnectionInfo {
@@ -64,6 +65,7 @@ export interface ConnectionInfo {
   downlink?: number;
   rtt?: number;
   type?: string;
+  saveData?: boolean;
 }
 
 const getConnectionApi = (): NetworkInformation | undefined =>
@@ -77,9 +79,9 @@ const getConnectionApi = (): NetworkInformation | undefined =>
 export const readConnection = (): ConnectionInfo | null => {
   const connection = getConnectionApi();
   if (!connection) return null;
-  const { effectiveType, downlink, rtt, type } = connection;
+  const { effectiveType, downlink, rtt, type, saveData } = connection;
   if (!effectiveType && !downlink && !type) return null;
-  return { effectiveType, downlink, rtt, type };
+  return { effectiveType, downlink, rtt, type, saveData };
 };
 
 /** Subscribes to connection changes. Returns an unsubscribe function. */

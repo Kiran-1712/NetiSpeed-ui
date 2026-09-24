@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Search, Globe, Activity, FileText, ShieldAlert } from 'lucide-react';
+import { Activity, ArrowRight, FileText, Globe, ShieldCheck, type LucideIcon } from 'lucide-react';
 import { IPINFO_BASE, formatIsp, getIpInfo, parseHostTarget, type IpInfo } from '../utils/network';
+import type { NetworkInfo } from '../hooks/useNetworkInfo';
 
 type ToolType = 'ip' | 'ping' | 'dns' | 'port';
 
@@ -76,7 +77,7 @@ const delay = (ms: number, signal: AbortSignal) =>
     signal.addEventListener('abort', onAbort, { once: true });
   });
 
-export default function Diagnostics() {
+export default function ToolsPage({ net }: { net: NetworkInfo }) {
   const [activeTool, setActiveTool] = useState<ToolType>('ip');
   const [target, setTarget] = useState('');
   const [results, setResults] = useState<string | null>(null);
@@ -299,147 +300,144 @@ export default function Diagnostics() {
     }
   };
 
-  const getPlaceholder = () => {
-    switch (activeTool) {
-      case 'ip': return 'Enter an IP address, or "me" for your own (e.g., 8.8.8.8)...';
-      case 'ping': return 'Enter a domain or IP (e.g., google.com)...';
-      case 'dns': return 'Enter a domain (e.g., example.com)...';
-      case 'port': return 'Enter a host, optionally with a port (e.g., example.com:8080)...';
-      default: return '';
-    }
-  };
-
-  const getIcon = () => {
-    switch (activeTool) {
-      case 'ip': return <Globe size={18} />;
-      case 'ping': return <Activity size={18} />;
-      case 'dns': return <FileText size={18} />;
-      case 'port': return <ShieldAlert size={18} />;
-    }
-  };
-
-  const tools: { id: ToolType; label: string; icon: React.ReactNode }[] = [
-    { id: 'ip', label: 'IP Lookup', icon: <Globe size={16} /> },
-    { id: 'ping', label: 'Ping Test', icon: <Activity size={16} /> },
-    { id: 'dns', label: 'DNS Lookup', icon: <FileText size={16} /> },
-    { id: 'port', label: 'Port Checker', icon: <ShieldAlert size={16} /> },
+  const tools: {
+    id: ToolType;
+    label: string;
+    icon: LucideIcon;
+    placeholder: string;
+    description: string;
+    examples: string[];
+  }[] = [
+    {
+      id: 'ip',
+      label: 'IP lookup',
+      icon: Globe,
+      placeholder: 'IP address, or leave empty for yours',
+      description: 'Geolocation and ASN for any public IP address.',
+      examples: ['me', '8.8.8.8', '1.1.1.1'],
+    },
+    {
+      id: 'ping',
+      label: 'Ping',
+      icon: Activity,
+      placeholder: 'Domain or IP, e.g. google.com',
+      description: 'HTTPS round-trip time and request loss to a host.',
+      examples: ['google.com', 'cloudflare.com', 'github.com'],
+    },
+    {
+      id: 'dns',
+      label: 'DNS lookup',
+      icon: FileText,
+      placeholder: 'Domain, e.g. example.com',
+      description: 'A, AAAA, CNAME, MX, TXT and NS records for a domain.',
+      examples: ['google.com', 'github.com', 'example.com'],
+    },
+    {
+      id: 'port',
+      label: 'Port check',
+      icon: ShieldCheck,
+      placeholder: 'Host, optionally with a port, e.g. example.com:8080',
+      description: 'Whether common ports on a host answer an HTTP request.',
+      examples: ['example.com', 'github.com:443', 'google.com'],
+    },
   ];
 
-  const titles: Record<ToolType, string> = {
-    ip: 'IP Lookup',
-    ping: 'Ping Test',
-    dns: 'DNS Lookup',
-    port: 'Port Checker',
-  };
-
-  const descriptions: Record<ToolType, string> = {
-    ip: 'Retrieve geolocation and ASN information for any public IP address.',
-    ping: 'Measure HTTPS round-trip time and request loss to a specific host.',
-    dns: 'Fetch DNS records (A, AAAA, CNAME, MX, TXT, NS) for a domain.',
-    port: 'Infer whether common ports on a host respond to an HTTP request.',
-  };
+  const current = tools.find((tool) => tool.id === activeTool) ?? tools[0];
+  const CurrentIcon = current.icon;
 
   return (
-    <div className="fade-in glass-panel responsive-split" style={{ padding: 0, overflow: 'hidden' }}>
+    <div className="page page-tools">
+      <section className="lead area-lead" aria-label="Choose a tool">
+        <div className="lead-head">
+          <span className="micro">Diagnostics</span>
+          <h1 className="lead-title">Tools</h1>
+        </div>
 
-      {/* Sidebar Tool Selector */}
-      <div className="split-sidebar">
-        <h3 style={{ marginBottom: '20px', fontSize: '16px', color: 'var(--text-secondary)' }}>Diagnostic Tools</h3>
-
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          {tools.map((tool) => (
+        <div className="tool-list" role="tablist" aria-label="Diagnostic tool" aria-orientation="vertical">
+          {tools.map(({ id, label, icon: Icon, description }) => (
             <button
-              key={tool.id}
+              key={id}
               type="button"
-              className={`btn ${activeTool === tool.id ? 'active' : ''}`}
-              style={{
-                justifyContent: 'flex-start',
-                background: activeTool === tool.id ? 'var(--panel-border)' : 'transparent',
-                border: 'none',
-              }}
-              aria-pressed={activeTool === tool.id}
-              onClick={() => selectTool(tool.id)}
+              role="tab"
+              aria-selected={activeTool === id}
+              className={`tool-item${activeTool === id ? ' active' : ''}`}
+              onClick={() => selectTool(id)}
             >
-              {tool.icon} {tool.label}
+              <span className="tool-icon">
+                <Icon size={16} />
+              </span>
+              <span className="tool-text">
+                <span className="tool-name">{label}</span>
+                <span className="tool-desc">{description}</span>
+              </span>
             </button>
           ))}
         </div>
-      </div>
 
-      {/* Main Tool Area */}
-      <div className="split-content">
-        <h2 style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
-          {getIcon()}
-          {titles[activeTool]}
-        </h2>
-        <p style={{ color: 'var(--text-secondary)', marginBottom: '24px', fontSize: '14px' }}>
-          {descriptions[activeTool]}
+        <div className="conn">
+          <span className="micro">Your connection</span>
+          <span className="conn-ip" title={net.ipv4}>{net.ipv4}</span>
+          <span className="conn-meta" title={net.isp}>{net.isp}</span>
+          <span className="conn-meta" title={net.location}>{net.location}</span>
+        </div>
+
+        <p className="notice lead-note">
+          Browsers can’t send ICMP or open raw sockets, so ping and port checks are inferred from HTTPS requests.
         </p>
+      </section>
 
-        <form onSubmit={runTest} className="input-group" style={{ marginBottom: '30px' }}>
+      <section className="card area-work" aria-label={current.label}>
+        <div className="work-head">
+          <span className="icon-disc light">
+            <CurrentIcon size={16} />
+          </span>
+          <div>
+            <h2 className="work-title">{current.label}</h2>
+            <p className="work-desc">{current.description}</p>
+          </div>
+        </div>
+
+        <form onSubmit={runTest} className="tool-form">
           <input
             type="text"
             className="input"
-            placeholder={getPlaceholder()}
+            placeholder={current.placeholder}
             value={target}
             onChange={(e) => setTarget(e.target.value)}
             spellCheck={false}
             autoComplete="off"
-            aria-label={`${titles[activeTool]} target`}
+            aria-label={`${current.label} target`}
           />
           <button
             type="submit"
-            className="btn btn-primary"
-            style={{ padding: '12px 24px' }}
+            className="run-btn"
             disabled={isLoading || (activeTool !== 'ip' && !target.trim())}
           >
-            {isLoading ? <div className="loader" style={{ width: '16px', height: '16px', borderWidth: '2px' }} /> : <Search size={18} />}
-            Run Test
+            {isLoading ? <span className="spinner" /> : <ArrowRight size={16} />}
+            Run
           </button>
         </form>
 
-        <div style={{ minHeight: '300px' }}>
-          {isLoading && (
-            <div style={{ display: 'flex', gap: '10px', alignItems: 'center', color: 'var(--text-secondary)', marginBottom: '16px' }}>
-              <div className="loader" /> Executing {activeTool} command...
-            </div>
-          )}
+        <div className="examples">
+          <span className="micro">Try</span>
+          {current.examples.map((example) => (
+            <button key={example} type="button" className="example" onClick={() => setTarget(example)}>
+              {example}
+            </button>
+          ))}
+        </div>
 
-          {results && (
-            <div style={{
-              background: 'var(--card-bg)',
-              padding: '20px',
-              borderRadius: '8px',
-              border: '1px solid var(--panel-border)',
-              fontFamily: 'var(--mono-font)',
-              fontSize: '13px',
-              whiteSpace: 'pre-wrap',
-              overflowX: 'auto',
-              color: 'var(--jitter-color)',
-              lineHeight: '1.6'
-            }} className="fade-in">
-              {results}
-            </div>
-          )}
-
-          {!isLoading && !results && (
-            <div style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              height: '300px',
-              color: 'var(--text-secondary)',
-              border: '1px dashed var(--panel-border)',
-              borderRadius: '8px'
-            }}>
-              {getIcon()}
-              <p style={{ marginTop: '12px' }}>Enter a target above to see results.</p>
+        <div className="tool-output" aria-live="polite">
+          {results ? (
+            <pre className="mono">{results}</pre>
+          ) : (
+            <div className="empty">
+              {isLoading ? <span className="spinner" /> : <CurrentIcon size={20} />}
+              <p>{isLoading ? 'Running…' : 'Results appear here.'}</p>
             </div>
           )}
         </div>
-      </div>
-
+      </section>
     </div>
   );
 }

@@ -10,6 +10,9 @@ export interface TestResult {
   upload: number;
   ping: number;
   quality: string;
+  /** Latency while downloading / uploading, for the bufferbloat grade. Absent on older entries. */
+  loadedDown?: number;
+  loadedUp?: number;
 }
 
 export type QualityRating = 'Excellent' | 'Good' | 'Fair' | 'Poor';
@@ -136,4 +139,12 @@ export const clearHistory = () => {
 
 export const deleteHistoryItem = (id: number) => {
   writeHistory(getHistory().filter((item) => item.id !== id));
+};
+
+const QUALITY_SLUGS = new Set(['excellent', 'good', 'fair', 'poor']);
+
+/** Only known ratings get a status class, so unexpected values can't break styling. */
+export const qualitySlug = (quality?: string) => {
+  const slug = (quality || '').toLowerCase();
+  return QUALITY_SLUGS.has(slug) ? slug : '';
 };
