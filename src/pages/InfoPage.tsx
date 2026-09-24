@@ -103,12 +103,8 @@ function Privacy() {
             Internet Measurement service (aim.cloudflare.com).
           </li>
           <li>
-            <strong>httpbin.org</strong> receives the upload test’s random data, only if Cloudflare’s upload
-            server can’t be reached.
-          </li>
-          <li>
-            <strong>ipify</strong>, <strong>ipwho.is</strong>, <strong>ipinfo.io</strong> and{' '}
-            <strong>ipapi.co</strong> return your public IP address, internet provider and approximate location
+            <strong>ipify</strong> and <strong>ipinfo.io</strong> return your public IP address, internet
+            provider and approximate location
             (city and region, from your IP address, not GPS). The IP lookup tool also sends the address or
             hostname you enter.
           </li>
