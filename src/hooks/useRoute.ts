@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { trackPageView } from '../utils/analytics';
 
 export type Route = 'dashboard' | 'history' | 'tools' | 'about' | 'privacy';
 
@@ -32,6 +33,7 @@ export function useRoute(): Route {
 
   useEffect(() => {
     document.title = TITLES[route];
+    trackPageView(hrefFor(route).slice(1), TITLES[route]);
   }, [route]);
 
   return route;

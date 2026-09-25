@@ -10,7 +10,7 @@ const PAGES: { id: InfoRoute; label: string; icon: LucideIcon; description: stri
   { id: 'privacy', label: 'Privacy policy', icon: ShieldCheck, description: 'What NetiSpeed sends, and where.' },
 ];
 
-const AT_A_GLANCE = ['No account or sign-in', 'No cookies, analytics or ads', 'Test history stays on this device'];
+const AT_A_GLANCE = ['No account or sign-in', 'No ads, and your results are never uploaded', 'Test history stays on this device'];
 
 function About() {
   return (
@@ -77,8 +77,8 @@ function Privacy() {
         <h3>The short version</h3>
         <p>
           This policy applies to NetiSpeed everywhere you use it, on the web and in the app. NetiSpeed has no
-          accounts, sets no cookies and runs no analytics or advertising. It has no server of its own that
-          receives your results. To measure your connection, though, your device has to talk to other services,
+          accounts and runs no advertising. The website uses Google Analytics to count visits, which sets
+          cookies. NetiSpeed has no server of its own that receives your results. To measure your connection, though, your device has to talk to other services,
           and each of them can see your IP address. This page lists every one of them.
         </p>
       </section>
@@ -123,6 +123,11 @@ function Privacy() {
           </li>
           <li>
             <strong>Google Fonts</strong> serves the Inter typeface.
+          </li>
+          <li>
+            <strong>Google Analytics</strong> (website only) receives which pages you open, your browser and
+            device type, and your approximate location from your IP address, and sets cookies to recognise
+            return visits. Your test results are not sent to it.
           </li>
         </ul>
         <p>
