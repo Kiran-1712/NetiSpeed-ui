@@ -1,20 +1,27 @@
-import { hrefFor, type Route } from '../hooks/useRoute';
+import { pathFor } from '../site/pages';
 import { copyrightLine } from '../utils/site';
 import PlayStoreLink from './PlayStoreLink';
 
-/** Wide screens only; on phones the About page is reached from the top bar. */
-export default function Footer({ route }: { route: Route }) {
+const LINKS = [
+  { label: 'Home', href: pathFor('home') },
+  { label: 'About', href: pathFor('about') },
+  { label: 'Contact', href: pathFor('contact') },
+  { label: 'Privacy policy', href: pathFor('privacy') },
+  { label: 'Terms', href: pathFor('terms') },
+];
+
+/** Wide screens only; on phones the website is reached from the top bar. */
+export default function Footer() {
   return (
     <footer className="footer">
       <span className="footer-copy">{copyrightLine()}</span>
-      <nav className="footer-links" aria-label="App, about and legal">
+      <nav className="footer-links" aria-label="Website and legal">
         <PlayStoreLink variant="inline" />
-        <a href={hrefFor('about')} aria-current={route === 'about' ? 'page' : undefined}>
-          About
-        </a>
-        <a href={hrefFor('privacy')} aria-current={route === 'privacy' ? 'page' : undefined}>
-          Privacy policy
-        </a>
+        {LINKS.map(({ label, href }) => (
+          <a key={label} href={href}>
+            {label}
+          </a>
+        ))}
       </nav>
     </footer>
   );

@@ -15,7 +15,7 @@ export default function PlayStoreLink({ variant = 'badge' }: { variant?: 'badge'
       href={PLAY_STORE_URL}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label="Get NetiSpeed on Google Play"
+      aria-label="Download NetiSpeed on Google Play"
     >
       <PlayIcon size={variant === 'badge' ? 22 : 13} />
       {variant === 'badge' ? (

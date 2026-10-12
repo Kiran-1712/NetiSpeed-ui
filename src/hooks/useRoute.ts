@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react';
 import { trackPageView } from '../utils/analytics';
+import { APP_PATH } from '../utils/site';
 
-export type Route = 'dashboard' | 'history' | 'tools' | 'about' | 'privacy';
+export type Route = 'dashboard' | 'history' | 'tools';
 
 const TITLES: Record<Route, string> = {
-  dashboard: 'NetiSpeed — Internet Speed Test & Network Diagnostics',
+  dashboard: 'Speed Test — NetiSpeed',
   history: 'History — NetiSpeed',
   tools: 'Tools — NetiSpeed',
-  about: 'About — NetiSpeed',
-  privacy: 'Privacy Policy — NetiSpeed',
 };
 
 const ROUTES = Object.keys(TITLES) as Route[];
@@ -33,7 +32,8 @@ export function useRoute(): Route {
 
   useEffect(() => {
     document.title = TITLES[route];
-    trackPageView(hrefFor(route).slice(1), TITLES[route]);
+    // GA drops the fragment, so #/tools is reported as /speed-test/tools.
+    trackPageView(route === 'dashboard' ? APP_PATH : `${APP_PATH}/${route}`, TITLES[route]);
   }, [route]);
 
   return route;

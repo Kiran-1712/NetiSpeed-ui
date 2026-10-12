@@ -85,11 +85,15 @@ body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   background: var(--zone-b);
   color: var(--b-ink);
-  /* One fixed viewport: the page itself never scrolls. */
-  overflow: hidden;
   -webkit-font-smoothing: antialiased;
   font-feature-settings: 'tnum' 1, 'cv11' 1;
   transition: background-color 0.3s ease;
+}
+
+/* The dashboard is one fixed viewport: the page itself never scrolls. The
+   website around it scrolls normally. */
+body.app-mode {
+  overflow: hidden;
 }
 
 button {
@@ -252,12 +256,6 @@ a {
   display: none;
 }
 
-.info-btn.active {
-  background: #FFFFFF;
-  border-color: transparent;
-  color: #1A1B1E;
-}
-
 /* Copyright under the white panel, legal links under the cards. Same
    columns as the page grid so both line up with what's above them. */
 .footer {
@@ -323,8 +321,7 @@ a {
     'lead table table';
 }
 
-.page-tools,
-.page-info {
+.page-tools {
   grid-template-rows: minmax(0, 1fr);
   grid-template-areas: 'lead work work';
 }
@@ -2152,59 +2149,6 @@ a {
   word-break: break-word;
 }
 
-/* About and Privacy */
-
-.glance {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 14px 16px;
-  border-radius: 20px;
-  border: 1.2px dashed var(--line);
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--ink);
-}
-
-.glance li {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.glance svg {
-  flex: none;
-  color: var(--good);
-}
-
-.info-copy {
-  display: none;
-}
-
-.get-app {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 16px;
-  border-radius: 20px;
-  background: var(--raise);
-}
-
-.get-app-text {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.get-app-text p {
-  font-size: 12.5px;
-  line-height: 1.4;
-  color: var(--ink-2);
-}
-
 /* Store-style button: black with a hairline border, as store badges are. */
 .play-badge {
   flex: none;
@@ -2250,57 +2194,6 @@ a {
   gap: 6px;
 }
 
-.prose {
-  flex: 1;
-  min-height: 0;
-  overflow: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 22px;
-  padding-right: 8px;
-  max-width: 76ch;
-  font-size: 14px;
-  line-height: 1.65;
-  color: var(--b-ink-2);
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.14) transparent;
-}
-
-.prose section {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.prose h3 {
-  font-size: 15px;
-  font-weight: 800;
-  letter-spacing: -0.01em;
-  color: var(--b-ink);
-}
-
-.prose ul {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding-left: 18px;
-}
-
-.prose li::marker {
-  color: var(--coral);
-}
-
-.prose strong {
-  font-weight: 700;
-  color: var(--b-ink);
-}
-
-.prose a {
-  color: var(--coral);
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-
 /* ---------- Tab bar (narrow screens only) ---------- */
 
 .tabbar {
@@ -2318,8 +2211,6 @@ a {
   .tool-desc { display: none; }
   .tool-item { padding: 9px 12px; }
   .lead-note { display: none; }
-  .page-info .glance,
-  .page-info .get-app-text p { display: none; }
   .app-features li:nth-child(n + 3) { display: none; }
 }
 
@@ -2497,47 +2388,6 @@ a {
   .page-tools {
     grid-template-rows: auto minmax(0, 1fr);
     grid-template-areas: 'lead' 'work';
-  }
-
-  .page-info {
-    grid-template-rows: auto minmax(0, 1fr);
-    grid-template-areas: 'lead' 'work';
-  }
-
-  .page-info .tool-list {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 4px;
-  }
-
-  .page-info .tool-item {
-    grid-template-columns: 32px minmax(0, 1fr);
-    gap: 10px;
-    padding: 10px;
-  }
-
-  .page-info .tool-icon { width: 32px; height: 32px; }
-  .page-info .tool-desc,
-  .page-info .glance,
-  .page-info .get-app-text p { display: none; }
-
-  .page-info .get-app {
-    padding: 10px 10px 10px 14px;
-  }
-
-  .page-info .play-badge {
-    height: 42px;
-  }
-
-  .page-info .lead-note {
-    display: block;
-    margin-top: 0;
-    padding-top: 12px;
-  }
-
-  .prose {
-    font-size: 13.5px;
-    padding-right: 4px;
   }
 
   .page-tools .tool-list {

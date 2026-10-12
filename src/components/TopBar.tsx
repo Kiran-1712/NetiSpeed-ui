@@ -1,6 +1,7 @@
 import { Gauge, History, Info, Moon, Sun, Wrench, type LucideIcon } from 'lucide-react';
 import { hrefFor, type Route } from '../hooks/useRoute';
 import netispeedLogo from '../assets/netispeed-logo.svg';
+import { pathFor } from '../site/pages';
 
 const LINKS: { id: Route; label: string; icon: LucideIcon }[] = [
   { id: 'dashboard', label: 'Dashboard', icon: Gauge },
@@ -21,7 +22,7 @@ export default function TopBar({ route, theme, onToggleTheme, testRunning }: Top
 
   return (
     <header className="topbar">
-      <a className="brand" href={hrefFor('dashboard')} aria-label="NetiSpeed dashboard">
+      <a className="brand" href={pathFor('home')} aria-label="NetiSpeed home">
         <img src={netispeedLogo} alt="" className="brand-logo" />
         <span className="brand-name">NetiSpeed</span>
       </a>
@@ -44,13 +45,8 @@ export default function TopBar({ route, theme, onToggleTheme, testRunning }: Top
       </nav>
 
       <div className="topbar-actions">
-        {/* Phones have no footer, so About and Privacy are reached from here. */}
-        <a
-          className={`icon-btn info-btn${route === 'about' || route === 'privacy' ? ' active' : ''}`}
-          href={hrefFor('about')}
-          aria-label="About and privacy"
-          title="About and privacy"
-        >
+        {/* Phones have no footer, so the website's About page is reached from here. */}
+        <a className="icon-btn info-btn" href={pathFor('about')} aria-label="About NetiSpeed" title="About NetiSpeed">
           <Info size={16} />
         </a>
         <button type="button" className="icon-btn" onClick={onToggleTheme} aria-label={themeLabel} title={themeLabel}>

@@ -5,7 +5,6 @@ import TabBar, { type Tab } from './components/TabBar';
 import DashboardPage, { type DashboardSub } from './pages/DashboardPage';
 import HistoryPage from './pages/HistoryPage';
 import ToolsPage from './pages/ToolsPage';
-import InfoPage from './pages/InfoPage';
 import { useSpeedTest } from './hooks/useSpeedTest';
 import { useNetworkInfo } from './hooks/useNetworkInfo';
 import { useHistory } from './hooks/useHistory';
@@ -60,9 +59,7 @@ function App() {
     }
   }, [theme]);
 
-  // About and Privacy have no tab of their own.
-  const activeTab: Tab | null =
-    route === 'dashboard' ? dashboardSub : route === 'history' || route === 'tools' ? route : null;
+  const activeTab: Tab = route === 'dashboard' ? dashboardSub : route;
 
   const selectTab = (tab: Tab) => {
     if (tab === 'test' || tab === 'network' || tab === 'insights') {
@@ -94,10 +91,9 @@ function App() {
           <HistoryPage history={history} onRunTest={runFromHistory} isRunning={test.isRunning} />
         )}
         {route === 'tools' && <ToolsPage net={net} />}
-        {(route === 'about' || route === 'privacy') && <InfoPage page={route} />}
       </main>
 
-      <Footer route={route} />
+      <Footer />
 
       <TabBar active={activeTab} onSelect={selectTab} />
     </div>
