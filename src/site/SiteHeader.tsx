@@ -1,7 +1,7 @@
-import { Gauge, Menu } from 'lucide-react';
+import { Menu } from 'lucide-react';
 import netispeedLogo from '../assets/netispeed-logo.svg';
-import { APP_PATH } from '../utils/site';
 import { pathFor, type SitePageId } from './pages';
+import { StartTestButton } from './ui';
 
 const LINKS: { id: SitePageId; label: string }[] = [
   { id: 'home', label: 'Home' },
@@ -21,7 +21,7 @@ export default function SiteHeader({ current }: { current: SitePageId }) {
     <header className="s-header">
       <div className="s-wrap s-header-row">
         <a className="s-brand" href="/" aria-label="NetiSpeed home">
-          <img src={netispeedLogo} alt="" width={32} height={32} />
+          <img src={netispeedLogo} alt="" width={30} height={30} />
           <span>NetiSpeed</span>
         </a>
 
@@ -30,11 +30,15 @@ export default function SiteHeader({ current }: { current: SitePageId }) {
         </nav>
 
         <div className="s-header-actions">
-          <a className="s-btn s-btn-coral s-btn-sm" href={APP_PATH}>
-            <Gauge size={15} aria-hidden="true" />
-            <span className="s-cta-long">Start speed test</span>
-            <span className="s-cta-short">Speed test</span>
-          </a>
+          <StartTestButton
+            small
+            label={
+              <>
+                <span className="s-cta-long">Start speed test</span>
+                <span className="s-cta-short">Speed test</span>
+              </>
+            }
+          />
 
           {/* A plain <details> so the menu works before the page has hydrated. */}
           <details className="s-menu">

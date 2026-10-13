@@ -10,7 +10,7 @@ export default function NotFound() {
     >
       <div className="s-cta-row">
         <StartTestButton />
-        <a className="s-btn s-btn-outline" href={pathFor('home')}>
+        <a className="s-btn s-btn-line" href={pathFor('home')}>
           Go to the home page
         </a>
       </div>

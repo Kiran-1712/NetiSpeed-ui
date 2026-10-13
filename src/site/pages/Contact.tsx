@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { Bug, Check, Copy, Handshake, Mail, ShieldCheck, type LucideIcon } from 'lucide-react';
+import { Bug, Check, Copy, Handshake, ShieldCheck, type LucideIcon } from 'lucide-react';
 import { CONTACT_EMAIL } from '../../utils/site';
 import { pathFor } from '../pages';
-import { PageHero, SectionHead } from '../ui';
+import { Label, PageHero, SectionHead, TextLink } from '../ui';
 
 const mailto = (subject: string) => `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}`;
 
@@ -46,19 +46,16 @@ function EmailCard() {
   };
 
   return (
-    <div className="s-card s-card-coral s-email-card">
-      <span className="s-icon s-icon-ink" aria-hidden="true">
-        <Mail size={18} />
-      </span>
-      <p className="s-tick s-tick-ink">Email</p>
+    <div className="s-email-card">
+      <Label>Email</Label>
       <a className="s-email" href={`mailto:${CONTACT_EMAIL}`}>
         {CONTACT_EMAIL}
       </a>
       <div className="s-email-actions">
-        <a className="s-btn s-btn-dark s-btn-sm" href={`mailto:${CONTACT_EMAIL}`}>
+        <a className="s-btn s-btn-coral s-btn-sm" href={`mailto:${CONTACT_EMAIL}`}>
           Write an email
         </a>
-        <button type="button" className="s-btn s-btn-ghost-ink s-btn-sm" onClick={copy}>
+        <button type="button" className="s-btn s-btn-line s-btn-sm" onClick={copy}>
           {copied === 'done' ? <Check size={15} aria-hidden="true" /> : <Copy size={15} aria-hidden="true" />}
           {copied === 'done' ? 'Copied' : 'Copy address'}
         </button>
@@ -89,15 +86,11 @@ export default function Contact() {
             title="What to write about"
             lead="Every topic goes to the same address. Choose one below to start an email with the subject filled in."
           />
-          <div className="s-grid s-grid-3">
+          <div className="s-items s-items-3">
             {TOPICS.map(({ icon: Icon, title, body, subject, tips }) => (
-              <article key={title} className="s-card s-feature">
-                <div className="s-feature-top">
-                  <span className="s-icon" aria-hidden="true">
-                    <Icon size={18} />
-                  </span>
-                </div>
-                <h3 className="s-h3">{title}</h3>
+              <article key={title} className="s-item">
+                <Icon className="s-item-icon" size={20} strokeWidth={1.75} aria-hidden="true" />
+                <h3 className="s-item-title">{title}</h3>
                 <p>{body}</p>
                 {tips && (
                   <>
@@ -109,17 +102,15 @@ export default function Contact() {
                     </ul>
                   </>
                 )}
-                <a className="s-textlink s-card-link" href={mailto(subject)}>
-                  Email about this
-                </a>
+                <TextLink href={mailto(subject)}>Email about this</TextLink>
               </article>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="s-section s-section-tight" aria-labelledby="before">
-        <div className="s-wrap s-prose-grid">
+      <section className="s-section" aria-labelledby="before">
+        <div className="s-wrap s-split">
           <SectionHead id="before" kicker="Before you write" title="Good to know" />
           <div className="s-prose">
             <p>

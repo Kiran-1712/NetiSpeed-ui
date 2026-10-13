@@ -14,7 +14,7 @@ export const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=com
 export const APP_PATH = '/speed-test';
 
 /** Bump when the privacy policy text changes. */
-export const POLICY_UPDATED = '13 October 2026';
+export const POLICY_UPDATED = '14 October 2026';
 
 /** Bump when the terms of service text change. */
 export const TERMS_UPDATED = '13 October 2026';

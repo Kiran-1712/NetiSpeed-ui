@@ -1,8 +1,9 @@
 import type { ReactNode } from 'react';
+import { ArrowRight } from 'lucide-react';
 import { APP_PATH, CONTACT_EMAIL, PLAY_STORE_URL } from '../../utils/site';
 import { AUDIENCES, SERVICE_NAMES } from '../content';
 import { pathFor } from '../pages';
-import { FeatureCard, PageHero, SectionHead, TextLink } from '../ui';
+import { CtaBand, FeatureGrid, Label, PageHero, SectionHead, TextLink } from '../ui';
 
 const FACTS: { label: string; value: ReactNode }[] = [
   { label: 'Product', value: 'NetiSpeed' },
@@ -31,19 +32,22 @@ export default function About() {
         title="About NetiSpeed"
         lead="NetiSpeed is an internet speed test and set of network diagnostics for the web and Android. It exists to make internet performance easy to understand and troubleshoot."
         aside={
-          <dl className="s-card s-facts" aria-label="NetiSpeed at a glance">
-            {FACTS.map((f) => (
-              <div key={f.label}>
-                <dt>{f.label}</dt>
-                <dd>{f.value}</dd>
-              </div>
-            ))}
-          </dl>
+          <div className="s-aside">
+            <Label>At a glance</Label>
+            <dl className="s-facts">
+              {FACTS.map((f) => (
+                <div key={f.label}>
+                  <dt>{f.label}</dt>
+                  <dd>{f.value}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
         }
       />
 
       <section className="s-section" aria-labelledby="problem">
-        <div className="s-wrap s-prose-grid">
+        <div className="s-wrap s-split">
           <SectionHead id="problem" kicker="The problem" title="Most people only notice their connection when it fails" />
           <div className="s-prose">
             <p>
@@ -59,8 +63,8 @@ export default function About() {
         </div>
       </section>
 
-      <section className="s-section s-section-tight" aria-labelledby="what">
-        <div className="s-wrap s-prose-grid">
+      <section className="s-section" aria-labelledby="what">
+        <div className="s-wrap s-split">
           <SectionHead id="what" kicker="What NetiSpeed does" title="The numbers behind how your internet feels" />
           <div className="s-prose">
             <p>
@@ -81,27 +85,21 @@ export default function About() {
       <section className="s-section" aria-labelledby="who">
         <div className="s-wrap">
           <SectionHead id="who" kicker="Who it’s for" title="For anyone who depends on their connection" />
-          <div className="s-grid s-grid-4">
-            {AUDIENCES.map((a) => (
-              <FeatureCard key={a.title} feature={a} />
-            ))}
-          </div>
+          <FeatureGrid items={AUDIENCES} cols={4} />
         </div>
       </section>
 
-      <section className="s-section s-section-tight" aria-labelledby="mission">
-        <div className="s-wrap">
-          <div className="s-panel s-mission">
-            <p className="s-kicker">Mission</p>
-            <h2 className="s-h2" id="mission">
-              Make internet performance easy to understand and troubleshoot.
-            </h2>
-          </div>
+      <section className="s-section s-night" aria-labelledby="mission">
+        <div className="s-wrap s-statement">
+          <Label>Mission</Label>
+          <h2 className="s-h2" id="mission">
+            Make internet performance easy to understand and troubleshoot.
+          </h2>
         </div>
       </section>
 
       <section className="s-section" aria-labelledby="stage">
-        <div className="s-wrap s-prose-grid">
+        <div className="s-wrap s-split">
           <SectionHead id="stage" kicker="Where we are" title="An early-stage product in active development" />
           <div className="s-prose">
             <p>
@@ -117,8 +115,8 @@ export default function About() {
         </div>
       </section>
 
-      <section className="s-section s-section-tight" aria-labelledby="how">
-        <div className="s-wrap s-prose-grid">
+      <section className="s-section" aria-labelledby="how">
+        <div className="s-wrap s-split">
           <SectionHead id="how" kicker="How it works" title="Measured against Cloudflare’s network" />
           <div className="s-prose">
             <p>
@@ -140,7 +138,7 @@ export default function About() {
       </section>
 
       <section className="s-section" aria-labelledby="credits">
-        <div className="s-wrap s-prose-grid">
+        <div className="s-wrap s-split">
           <SectionHead id="credits" kicker="Built with" title="Open services and libraries" />
           <div className="s-prose">
             <ul>
@@ -148,7 +146,7 @@ export default function About() {
               <li>Leaflet, with map data © OpenStreetMap contributors</li>
               <li>ipify, ipinfo.io, ipwho.is and ipapi.co for IP address and provider lookups</li>
               <li>Google Public DNS for DNS lookups</li>
-              <li>Simple Icons (CC0) and Lucide for icons, and the Inter typeface</li>
+              <li>Simple Icons (CC0) and Lucide for icons, and the Inter and Archivo typefaces</li>
             </ul>
             <p>
               Brand names and logos belong to their owners. They’re shown only to label each service’s latency and don’t
@@ -158,23 +156,20 @@ export default function About() {
         </div>
       </section>
 
-      <section className="s-section s-section-tight" aria-labelledby="talk">
-        <div className="s-wrap">
-          <div className="s-cta-band">
-            <div>
-              <h2 className="s-h2" id="talk">
-                Questions, feedback or partnership ideas?
-              </h2>
-              <p>
-                Write to <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.
-              </p>
-            </div>
-            <a className="s-btn s-btn-dark" href={pathFor('contact')}>
-              Contact us
-            </a>
-          </div>
-        </div>
-      </section>
+      <CtaBand
+        id="talk"
+        title="Questions, feedback or partnership ideas?"
+        action={
+          <a className="s-btn s-btn-coral" href={pathFor('contact')}>
+            Contact us
+            <ArrowRight size={17} aria-hidden="true" />
+          </a>
+        }
+      >
+        <p>
+          Write to <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.
+        </p>
+      </CtaBand>
     </>
   );
 }

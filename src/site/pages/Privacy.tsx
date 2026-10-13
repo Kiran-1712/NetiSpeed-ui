@@ -1,6 +1,6 @@
 import { CONTACT_EMAIL, POLICY_UPDATED, SITE_URL } from '../../utils/site';
 import { pathFor } from '../pages';
-import { LegalDocument, PageHero, type LegalSection } from '../ui';
+import { Checks, Label, LegalDocument, PageHero, type LegalSection } from '../ui';
 
 const GLANCE = [
   'No accounts and no advertising',
@@ -202,7 +202,7 @@ const SECTIONS: LegalSection[] = [
             <strong>Hosts you test</strong>: the ping and port tools send requests directly to the host you enter.
           </li>
           <li>
-            <strong>Google Fonts</strong> (website only): serves the Inter typeface.
+            <strong>Google Fonts</strong> (website only): serves the Inter and Archivo typefaces.
           </li>
           <li>
             <strong>Google Analytics</strong> (website only): as described under <a href="#analytics">Analytics</a>.
@@ -324,13 +324,9 @@ export default function Privacy() {
         title="Privacy Policy"
         lead="What NetiSpeed processes on the web and in the Android app, which services your device contacts, and the choices you have."
         aside={
-          <div className="s-card s-glance">
-            <p className="s-kicker">At a glance</p>
-            <ul className="s-ticks">
-              {GLANCE.map((g) => (
-                <li key={g}>{g}</li>
-              ))}
-            </ul>
+          <div className="s-aside">
+            <Label>At a glance</Label>
+            <Checks items={GLANCE} />
           </div>
         }
       />

@@ -1,76 +1,71 @@
-import { Mail } from 'lucide-react';
+import type { CSSProperties } from 'react';
+import { ArrowUp } from 'lucide-react';
 import netispeedLogo from '../assets/netispeed-logo.svg';
 import PlayStoreLink from '../components/PlayStoreLink';
-import { APP_PATH, CONTACT_EMAIL, PLAY_STORE_URL, copyrightLine } from '../utils/site';
-import { pathFor } from './pages';
+import { CONTACT_EMAIL, copyrightLine } from '../utils/site';
+import { pathFor, type SitePageId } from './pages';
 
-const COLUMNS: { title: string; links: { label: string; href: string; external?: boolean }[] }[] = [
-  {
-    title: 'Product',
-    links: [
-      { label: 'Home', href: pathFor('home') },
-      { label: 'Speed test', href: APP_PATH },
-      { label: 'Features', href: pathFor('features') },
-      { label: 'Android app', href: PLAY_STORE_URL, external: true },
-    ],
-  },
-  {
-    title: 'NetiSpeed',
-    links: [
-      { label: 'About', href: pathFor('about') },
-      { label: 'Contact', href: pathFor('contact') },
-    ],
-  },
-  {
-    title: 'Legal',
-    links: [
-      { label: 'Privacy policy', href: pathFor('privacy') },
-      { label: 'Terms of service', href: pathFor('terms') },
-    ],
-  },
+// What a test measures, in the order a test runs. Colours are the dashboard's
+// dark-zone series colours, as on the home page's spec sheet.
+const MEASURES: { text: string; color: string }[] = [
+  { text: 'Download speed', color: 'var(--dl-b)' },
+  { text: 'Upload speed', color: 'var(--ul-b)' },
+  { text: 'Latency', color: 'var(--ping-b)' },
+  { text: 'Jitter', color: 'var(--coral)' },
+  { text: 'Bufferbloat', color: 'var(--warn)' },
+  { text: 'Packet loss', color: 'var(--bad)' },
 ];
 
-export default function SiteFooter() {
+const LEGAL: { id: SitePageId; label: string }[] = [
+  { id: 'privacy', label: 'Privacy policy' },
+  { id: 'terms', label: 'Terms of service' },
+];
+
+/**
+ * A sign-off rather than a second menu (the header already links every page).
+ * The six things a test measures are set large, and a highlight runs through
+ * them in turn, the way a test steps through its phases.
+ */
+export default function SiteFooter({ current }: { current: SitePageId }) {
   return (
     <footer className="s-footer">
       <div className="s-wrap">
-        <div className="s-footer-grid">
-          <div className="s-footer-brand">
-            <a className="s-brand" href="/" aria-label="NetiSpeed home">
-              <img src={netispeedLogo} alt="" width={32} height={32} loading="lazy" />
-              <span>NetiSpeed</span>
-            </a>
-            <p>Internet speed test and network diagnostics for the web and Android.</p>
-            <a className="s-footer-mail" href={`mailto:${CONTACT_EMAIL}`}>
-              <Mail size={15} aria-hidden="true" />
-              {CONTACT_EMAIL}
-            </a>
-          </div>
+        <div className="s-fmeasures">
+          <p className="s-label">What every test measures</p>
+          <ul className="s-fwords">
+            {MEASURES.map((m, i) => (
+              <li key={m.text} style={{ '--c': m.color, '--i': i } as CSSProperties}>
+                {m.text}
+              </li>
+            ))}
+          </ul>
+        </div>
 
-          {COLUMNS.map((col) => (
-            <nav key={col.title} className="s-footer-col" aria-label={col.title}>
-              <p className="s-kicker">{col.title}</p>
-              <ul>
-                {col.links.map((l) => (
-                  <li key={l.label}>
-                    {l.external ? (
-                      <a href={l.href} target="_blank" rel="noopener noreferrer">
-                        {l.label}
-                        <span className="s-sr"> (opens Google Play)</span>
-                      </a>
-                    ) : (
-                      <a href={l.href}>{l.label}</a>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          ))}
+        <div className="s-fmeta">
+          <a className="s-brand" href="/" aria-label="NetiSpeed home">
+            <img src={netispeedLogo} alt="" width={30} height={30} loading="lazy" />
+            <span>NetiSpeed</span>
+          </a>
+          <p className="s-fmeta-about">Internet speed test and network diagnostics for the web and Android.</p>
+          <a className="s-footer-mail" href={`mailto:${CONTACT_EMAIL}`}>
+            {CONTACT_EMAIL}
+          </a>
+          <PlayStoreLink />
         </div>
 
         <div className="s-footer-bottom">
           <p>{copyrightLine()}</p>
-          <PlayStoreLink />
+          <nav className="s-footer-legal" aria-label="Legal">
+            {LEGAL.map((l) => (
+              <a key={l.id} href={pathFor(l.id)} aria-current={l.id === current ? 'page' : undefined}>
+                {l.label}
+              </a>
+            ))}
+          </nav>
+          <a className="s-footer-up" href="#top">
+            Back to top
+            <ArrowUp size={15} aria-hidden="true" />
+          </a>
         </div>
       </div>
     </footer>

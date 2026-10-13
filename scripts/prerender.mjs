@@ -105,6 +105,10 @@ const build = (page, body, indexed) => {
     `<meta name="description" content="${esc(page.description)}" />`,
     'meta description',
   );
+  // The website has a white header; the dashboard keeps the charcoal browser bar.
+  if (page.id !== 'app') {
+    html = replaceOnce(html, /<meta name="theme-color" content="[^"]*" \/>/, '<meta name="theme-color" content="#FFFFFF" />', 'theme-color');
+  }
   html = replaceOnce(html, /<\/head>/, `${headTags(page, indexed)}\n</head>`, '</head>');
   html = replaceOnce(html, /<div id="root"><\/div>/, `<div id="root">${body}</div>`, 'empty #root');
   return html;

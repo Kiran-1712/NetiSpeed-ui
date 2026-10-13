@@ -34,7 +34,7 @@ export interface Metric {
   label: string;
   title: string;
   body: string;
-  /** CSS colour token for the tick beside the label. */
+  /** CSS colour token for the tick beside the label, stepped for the white page. */
   tone: string;
 }
 
@@ -43,19 +43,19 @@ export const METRICS: Metric[] = [
     label: 'Download',
     title: 'Download speed',
     body: 'How fast data reaches you. It decides streaming quality, how long downloads take and how quickly pages load.',
-    tone: 'var(--dl-b)',
+    tone: 'var(--dl-a)',
   },
   {
     label: 'Upload',
     title: 'Upload speed',
     body: 'How fast you can send data. It matters for video calls, cloud backups, live streaming and sharing large files.',
-    tone: 'var(--ul-b)',
+    tone: 'var(--ul-a)',
   },
   {
     label: 'Latency',
     title: 'Ping and latency',
     body: 'The round trip to the nearest test server. Lower latency makes games, calls and browsing feel more responsive.',
-    tone: 'var(--ping-b)',
+    tone: 'var(--ping-a)',
   },
   {
     label: 'Jitter',

@@ -10,6 +10,7 @@ import Contact from './pages/Contact';
 import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
 import NotFound from './pages/NotFound';
+import { useReveal } from './useReveal';
 import './site.css';
 
 const VIEWS: Record<SitePageId, ComponentType> = {
@@ -34,6 +35,8 @@ export default function Site({ page }: { page: SitePage }) {
     trackPageView(window.location.pathname, page.title);
   }, [page]);
 
+  useReveal();
+
   return (
     <div className="site">
       <a className="s-skip" href="#content">
@@ -43,7 +46,7 @@ export default function Site({ page }: { page: SitePage }) {
       <main id="content" className="s-main">
         <View />
       </main>
-      <SiteFooter />
+      <SiteFooter current={page.id} />
     </div>
   );
 }

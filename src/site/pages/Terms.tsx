@@ -1,6 +1,6 @@
 import { CONTACT_EMAIL, SITE_URL, TERMS_UPDATED } from '../../utils/site';
 import { pathFor } from '../pages';
-import { LegalDocument, PageHero, type LegalSection } from '../ui';
+import { Checks, Label, LegalDocument, PageHero, type LegalSection } from '../ui';
 
 const GLANCE = [
   'Free to use, no account needed',
@@ -198,13 +198,9 @@ export default function Terms() {
         title="Terms of Service"
         lead="The ground rules for using the NetiSpeed website, speed test, network tools and Android app."
         aside={
-          <div className="s-card s-glance">
-            <p className="s-kicker">At a glance</p>
-            <ul className="s-ticks">
-              {GLANCE.map((g) => (
-                <li key={g}>{g}</li>
-              ))}
-            </ul>
+          <div className="s-aside">
+            <Label>At a glance</Label>
+            <Checks items={GLANCE} />
           </div>
         }
       />
