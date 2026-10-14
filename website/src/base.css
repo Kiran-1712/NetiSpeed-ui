@@ -1,0 +1,78 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+/*
+ * Page reset and the palette tokens the website shares with the dashboard
+ * (web-app/src/index.css), at their light-theme values. Some are only set
+ * from components as inline --tone styles. Everything else lives in site.css.
+ */
+:root {
+  --coral: #FF7F50;
+  --on-coral: #1A1B1E;
+  --warn: #E0A21B;
+  --bad: #EF5350;
+
+  /* Series colours: -a on light surfaces, -b on charcoal. */
+  --dl-a: #0A936A;
+  --ul-a: #4F46E5;
+  --ping-a: #D9551F;
+  --dl-b: #16A676;
+  --ul-b: #7C7EF2;
+  --ping-b: #E85F2B;
+
+  --mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, monospace;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: #FFFFFF;
+  color: #16171A;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: 'tnum' 1, 'cv11' 1;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: default;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--coral);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

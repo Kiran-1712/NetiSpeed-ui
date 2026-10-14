@@ -3,34 +3,29 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "workspaces": [
+    "website",
+    "web-app"
+  ],
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build && vite build --ssr src/site/entry-server.tsx --outDir dist-ssr && node scripts/prerender.mjs",
+    "dev": "node scripts/dev.mjs",
+    "dev:website": "npm run dev -w website",
+    "dev:app": "npm run dev -w web-app",
+    "build": "npm run build -w website && npm run build -w web-app",
+    "build:website": "npm run build -w website",
+    "build:app": "npm run build -w web-app",
     "lint": "eslint .",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "@cloudflare/speedtest": "^1.7.0",
-    "@types/leaflet": "^1.9.21",
-    "leaflet": "^1.9.4",
-    "lucide-react": "^1.6.0",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4",
-    "react-leaflet": "^5.0.0",
-    "simple-icons": "^16.32.0"
+    "preview": "firebase serve --only hosting",
+    "deploy": "npm run build && firebase deploy --only hosting",
+    "deploy:website": "npm run build -w website && firebase deploy --only hosting:website",
+    "deploy:app": "npm run build -w web-app && firebase deploy --only hosting:web-app"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",
-    "@types/node": "^24.12.0",
-    "@types/react": "^19.2.14",
-    "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^6.0.1",
     "eslint": "^9.39.4",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.4.0",
-    "typescript": "~5.9.3",
-    "typescript-eslint": "^8.57.0",
-    "vite": "^8.0.1"
+    "typescript-eslint": "^8.57.0"
   }
 }

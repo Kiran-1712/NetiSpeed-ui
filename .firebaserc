@@ -1,5 +1,13 @@
 {
     "projects": {
         "default": "netispeed-61369"
+    },
+    "targets": {
+        "netispeed-61369": {
+            "hosting": {
+                "website": ["netispeed-61369"],
+                "web-app": ["netispeed-app"]
+            }
+        }
     }
 }

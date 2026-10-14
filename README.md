@@ -1,24 +1,42 @@
 # NetiSpeed UI
 
-The netispeed.in website and its browser-based internet speed test and network diagnostics dashboard,
-built with React 19, TypeScript and Vite.
+Two separate web apps for NetiSpeed, built with React 19, TypeScript and Vite, deployed as two
+Firebase Hosting sites:
 
-## Structure
+| Folder | What it is | Served at | Firebase site |
+| --- | --- | --- | --- |
+| `website/` | The marketing and legal website | `netispeed.in` | `netispeed-61369` |
+| `web-app/` | The speed test and network diagnostics dashboard | `app.netispeed.in` | `netispeed-app` |
+| `shared/` | Code both use: site facts, analytics, service list, Play Store link, logo | – | – |
 
-| URL | What it is | Source |
-| --- | --- | --- |
-| `/` | Homepage | `src/site/pages/Home.tsx` |
-| `/features`, `/about`, `/contact` | Product pages | `src/site/pages/` |
-| `/privacy-policy`, `/terms` | Legal pages | `src/site/pages/` |
-| `/speed-test` (`#/history`, `#/tools`) | The dashboard, unchanged, hash-routed | `src/App.tsx`, `src/pages/` |
+Each app has its own `package.json`, `index.html`, Vite and TypeScript config, and `public/`. The repo
+root is an npm workspace that installs both and holds the shared lint and Firebase config. Code in
+`shared/` is imported as `@shared/...`.
 
-The website pages are prerendered to static HTML at build time (`scripts/prerender.mjs`), each with its
-own title, description, canonical URL, Open Graph tags and JSON-LD, and then hydrated. Page metadata
-lives in `src/site/pages.ts`, which also drives `sitemap.xml`. The dashboard is client-rendered and loaded
-on demand, so the website never downloads the speed test engine or the map. Old links such as
-`/#/history` and `/#/privacy` are redirected in `src/main.tsx`.
+### Website (`website/`)
 
-Site-wide facts (contact email, Play Store URL, policy dates) live in `src/utils/site.ts`.
+| URL | Source |
+| --- | --- |
+| `/` | `src/pages/Home.tsx` |
+| `/features`, `/about`, `/contact` | `src/pages/` |
+| `/privacy-policy`, `/terms` | `src/pages/` |
+
+Pages are prerendered to static HTML at build time (`scripts/prerender.mjs`), each with its own title,
+description, canonical URL, Open Graph tags and JSON-LD, and then hydrated. Page metadata lives in
+`src/pages.ts`, which also drives `sitemap.xml`. Old URLs are redirected: `/speed-test` and `/app` go to
+`app.netispeed.in` (in `firebase.json`), and old hash links such as `/#/history` and `/#/privacy` are
+handled in `src/main.tsx`.
+
+### Web app (`web-app/`)
+
+The dashboard, hash-routed (`#/history`, `#/tools`) and client-rendered. Its head tags are static in
+`index.html`.
+
+### Shared facts
+
+Site-wide facts (both origins, contact email, Play Store URL, policy dates, website page paths) live in
+`shared/site.ts`. Links from one app to the other use `WEBSITE_ORIGIN` / `APP_ORIGIN`, which point at
+the production domains in builds and at the local dev servers in dev.
 
 ## Dashboard features
 
@@ -33,12 +51,15 @@ Site-wide facts (contact email, Play Store URL, policy dates) live in `src/utils
 ## Getting started
 
 ```bash
-npm install
-npm run dev      # dev server with HMR
-npm run build    # typecheck, client build, SSR build, then prerender pages + sitemap into dist/
-npm run preview  # serve the production build locally
-npm run lint     # eslint
+npm install          # installs both apps (npm workspaces)
+npm run dev          # both dev servers: website on :5173, web app on :5174
+npm run dev:website  # just the website
+npm run dev:app      # just the web app
+npm run build        # builds website/dist (typecheck, client, SSR, prerender) and web-app/dist
+npm run lint         # eslint over both apps and shared/
 ```
+
+The dev ports are fixed (`strictPort`) because the two apps link to each other on them.
 
 ## External services
 
@@ -70,12 +91,21 @@ than displaying a substitute value:
 
 ## Deployment
 
-Firebase Hosting, configured in `firebase.json` (site `netispeed-61369`, serving `dist/`). Pages are
-flat HTML files served through `cleanUrls` (`/about` → `about.html`), so no SPA rewrite is needed, and
-unknown URLs get `404.html` with a real 404 status.
+Firebase Hosting, one project with two sites, configured as hosting targets in `firebase.json` and
+`.firebaserc`:
+
+- `website` → site `netispeed-61369`, serving `website/dist/`. Pages are flat HTML files served
+  through `cleanUrls` (`/about` → `about.html`), so no SPA rewrite is needed, and unknown URLs get
+  `404.html` with a real 404 status.
+- `web-app` → site `netispeed-app`, serving `web-app/dist/`, with every path rewritten to
+  `index.html`.
 
 ```bash
-npm run build
-firebase serve --only hosting   # check clean URLs, redirects and 404s locally
-firebase deploy --only hosting
+npm run deploy          # build and deploy both
+npm run deploy:website  # build and deploy only the website
+npm run deploy:app      # build and deploy only the web app
+npm run preview         # firebase serve, to check URLs, redirects and 404s locally
 ```
+
+One-time setup for the web app site: create it (`firebase hosting:sites:create netispeed-app`), then
+connect `app.netispeed.in` to it in the Firebase console under Hosting → Add custom domain.
