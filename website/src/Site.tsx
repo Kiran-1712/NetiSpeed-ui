@@ -32,7 +32,7 @@ export default function Site({ page }: { page: SitePage }) {
 
   useEffect(() => {
     document.title = page.title;
-    trackPageView(window.location.pathname, page.title);
+    trackPageView('Website', window.location.pathname, page.title);
   }, [page]);
 
   useReveal();

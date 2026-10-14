@@ -32,7 +32,7 @@ export function useRoute(): Route {
   useEffect(() => {
     document.title = TITLES[route];
     // GA drops the fragment, so #/tools is reported as /tools.
-    trackPageView(route === 'dashboard' ? '/' : `/${route}`, TITLES[route]);
+    trackPageView('Speed test', route === 'dashboard' ? '/' : `/${route}`, TITLES[route]);
   }, [route]);
 
   return route;
